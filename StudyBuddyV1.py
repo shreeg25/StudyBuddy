@@ -63,7 +63,7 @@ def main_app():
         print(f" {Colors.BOLD}1.{Colors.END} Home / Why Join Us?")
         print(f" {Colors.BOLD}2.{Colors.END} FAQs")
         print(f" {Colors.BOLD}3.{Colors.END} About Us")
-        print(f" {Colors.BOLD}4.{Colors.END} {Colors.BG_BLUE}{Colors.WHITE} Sign Up / Login {Colors.END} <--- Start Here")
+        print(f" {Colors.BOLD}4.{Colors.END} Sign Up / Login")
         print(f" {Colors.BOLD}5.{Colors.END} Contact Us")
         print(f" {Colors.BOLD}6.{Colors.END} AI Chatbot Helper (Beta)")
         print(f" {Colors.BOLD}0.{Colors.END} {Colors.RED}Exit{Colors.END}")
