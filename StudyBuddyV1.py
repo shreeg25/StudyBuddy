@@ -65,7 +65,7 @@ def main_app():
         print(f" {Colors.BOLD}3.{Colors.END} About Us")
         print(f" {Colors.BOLD}4.{Colors.END} Sign Up / Login")
         print(f" {Colors.BOLD}5.{Colors.END} Contact Us")
-        print(f" {Colors.BOLD}6.{Colors.END} AI Chatbot Helper (Beta)")
+        print(f" {Colors.BOLD}6.{Colors.END} AI Chatbot Helper (not fully working)")
         print(f" {Colors.BOLD}0.{Colors.END} {Colors.RED}Exit{Colors.END}")
         
         choice = input(f"\n{Colors.BLUE}Select Option > {Colors.END}")
