@@ -50,7 +50,7 @@ def loading_spinner(text="Processing", duration=1.5):
 def press_enter():
     input(f"\n{Colors.GREY}Press [Enter] to continue...{Colors.END}")
 
-# --- SECTIONS BASED ON SLIDES 9-11 (MAINPAGE) ---
+# --- MAINPAGE ---
 
 def main_app():
     while True:
@@ -92,7 +92,7 @@ def main_app():
 
 def show_why_join_us():
     print_header("Why Join Us?")
-    # Slide 4 content
+    
     print(f"{Colors.GREEN}✓{Colors.END} 40-50% less time for teacher reporting")
     print(f"{Colors.GREEN}✓{Colors.END} Early identification of at-risk students")
     print(f"{Colors.GREEN}✓{Colors.END} Personalized AI recommendations")
@@ -108,20 +108,20 @@ def show_faqs():
 
 def show_about_us():
     print_header("About Us")
-    # Slide 1 content
+   
     print(f"{Colors.BOLD}Team Lowkey{Colors.END} | IIIT Sri City")
     print("Mission: To solve student depression linked to poor performance by providing direction.")
     press_enter()
 
 def chatbot_preview():
-    # Slide 11 mentions "Chatbot"
+  
     print_header("AI Assistant")
     print(f"{Colors.CYAN}Bot:{Colors.END} Hello! I can help you navigate StudyBuddy. What are you looking for?")
     input(f"{Colors.YELLOW}You:{Colors.END} ")
     print(f"{Colors.CYAN}Bot:{Colors.END} To access that, please Login first via Option 4.")
     press_enter()
 
-# --- LOGIN PORTAL (Slide 11) ---
+# --- LOGIN PORTAL ---
 
 def login_portal():
     print_header("Login", "Select your role")
@@ -139,15 +139,15 @@ def login_portal():
     elif role == '3':
         dashboard_creator()
 
-# --- STUDENT DASHBOARD (Slides 12-14) ---
+# --- STUDENT DASHBOARD ---
 
 def dashboard_student():
     loading_spinner("Loading Student Profile")
     while True:
-        # Header based on Slide 13 (Krish, 12, PCM)
+       
         print_header("Student Dashboard", "User: Krish | Class: 12 | Stream: PCM | Org: IIIT_Sri_City")
         
-        # Features based on Slide 14
+        
         print(f"{Colors.BOLD}--- Resources & Tools ---{Colors.END}")
         print(f" 1. {Colors.CYAN}AI Performance Analysis{Colors.END} (Test Results)")
         print(f" 2. {Colors.CYAN}Smart Resources{Colors.END} (Personalised Suggestions)")
@@ -164,7 +164,7 @@ def dashboard_student():
             print(f"\n{Colors.CYAN}AI Insight:{Colors.END} You need more practice in Physics formulas.")
             press_enter()
         elif choice == '2':
-            # Slide 14: Upload own resources / Get suggestions
+            
             print(f"\n{Colors.BOLD}AI Suggested Resources for 'Physics':{Colors.END}")
             print("1. Video: Laws of Thermodynamics (Khan Academy)")
             print("2. PDF: Chapter 4 Summary Notes")
@@ -184,15 +184,15 @@ def dashboard_student():
         elif choice == '5':
             break
 
-# --- EDUCATOR DASHBOARD (Slides 15-16) ---
+# --- EDUCATOR DASHBOARD ---
 
 def dashboard_educator():
     loading_spinner("Authenticating Educator")
     while True:
-        # Header based on Slide 16 (Narayan, School_Coaching_name)
+        
         print_header("Educator Dashboard", "User: Narayan | Dept: PCM | Org: School_Coaching_name")
         
-        # Features based on Slide 16
+       
         print(f" 1. {Colors.BLUE}View Students Performance{Colors.END}")
         print(f" 2. {Colors.BLUE}Give Suggestions / Feedback{Colors.END}")
         print(f" 3. {Colors.BLUE}Connect with Students{Colors.END}")
@@ -215,7 +215,7 @@ def dashboard_educator():
         elif choice == '5':
             break
 
-# --- CREATOR DASHBOARD (Slides 17-19) ---
+# --- CREATOR DASHBOARD ---
 
 def dashboard_creator():
     loading_spinner("Accessing Admin Console")
@@ -223,13 +223,13 @@ def dashboard_creator():
     pending_requests = [{"name": "Krish", "stream": "PCM", "role": "Student"}]
 
     while True:
-        # Header based on Slide 18 (Laxmi, LS01)
+        
         req_count = len(pending_requests)
         alert_color = Colors.RED if req_count > 0 else Colors.GREY
         
         print_header("Creator Dashboard", f"User: Laxmi (Owner) | Org ID: LS01 | {alert_color}{req_count} Pending Requests{Colors.END}")
         
-        # Features based on Slide 18/19
+        
         print(f" 1. {Colors.YELLOW}Joining Requests ({req_count}){Colors.END}")
         print(f" 2. {Colors.YELLOW}Creator's Profile{Colors.END}")
         print(f" 3. {Colors.RED}Logout{Colors.END}")
@@ -237,7 +237,7 @@ def dashboard_creator():
         choice = input(f"\n{Colors.YELLOW}Action > {Colors.END}")
 
         if choice == '1':
-            # Slide 19: Joining Requests UI
+            
             if not pending_requests:
                 print("\nNo pending requests.")
                 press_enter()
