@@ -1,5 +1,5 @@
 import React from 'react';
-import StudyBuddyDashboard from './StudyBuddyResourcesGUI';
+import StudyBuddyResourcesGUI from './StudyBuddyResourcesGUI';
 
 function App() {
   return (
