@@ -3,9 +3,8 @@ import {
   Brain, LayoutDashboard, Lightbulb, GraduationCap, 
   Menu, Zap, PenTool, Save, Trash2, RefreshCw, Loader2, 
   ChevronRight, PlayCircle, FileText, CheckCircle2,
-  Video, Clock, ExternalLink
+  Video, Clock, ExternalLink, LogOut, AlertCircle
 } from 'lucide-react';
-
 
 // --- CONFIGURATION ---
 const MOCK_DATA = [
@@ -42,6 +41,7 @@ const StudyBuddyResourcesGUI = () => {
   const [notes, setNotes] = useState("");
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
   
   // User Context
   const user = { name: "Krish", weakAreas: ["Thermodynamics", "Entropy"] };
@@ -55,22 +55,23 @@ const StudyBuddyResourcesGUI = () => {
     if (!isStudyMode) setIsSidebarOpen(false); // Auto-focus
   };
 
-  // API Call (Strictly using .env)
+  // --- API CALL ---
   const fetchRecommendations = async () => {
+    setErrorMsg(null);
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
-      alert("API Key missing! Please set VITE_GEMINI_API_KEY in your .env file.");
+      setErrorMsg("Missing API Key! Ensure your .env file has VITE_GEMINI_API_KEY and restart the server.");
       setRecommendations(MOCK_DATA);
       return;
     }
 
     setLoading(true);
     try {
-      // UPDATED PROMPT: Explicitly asking for a 'link'
       const prompt = `I am a Class 12 student weak in ${user.weakAreas.join(", ")}. Suggest 3 short resources (Video/Notes). Return ONLY a JSON array with keys: title, type, source, desc, link (valid URL).`;
       
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      // UPDATED: Now using gemini-2.0-flash
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -78,15 +79,19 @@ const StudyBuddyResourcesGUI = () => {
 
       const data = await response.json();
       
-      if (data.error) throw new Error(data.error.message);
+      if (data.error) {
+        throw new Error(`API Error: ${data.error.message}`);
+      }
 
       const raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!raw) throw new Error("No response text from AI");
+
       const json = JSON.parse(raw.replace(/```json|```/g, '').trim());
       setRecommendations(json);
       
     } catch (err) {
       console.error(err);
-      alert("AI Fetch failed. Using demo data.");
+      setErrorMsg(err.message || "Unknown error");
       setRecommendations(MOCK_DATA);
     } finally {
       setLoading(false);
@@ -158,11 +163,21 @@ const StudyBuddyResourcesGUI = () => {
               </button>
             </div>
 
+            {errorMsg && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-start">
+                <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+                <div>
+                  <p className="font-bold">Error Detected:</p>
+                  <p>{errorMsg}</p>
+                  <p className="text-xs mt-1 opacity-75">Using mock data for now.</p>
+                </div>
+              </div>
+            )}
+
             <div className="grid gap-4">
               {loading && <div className="text-center p-8 text-slate-400"><Loader2 className="animate-spin mx-auto mb-2 text-emerald-500"/>AI is analyzing...</div>}
               
               {!loading && recommendations.map((rec, idx) => {
-                // FALLBACK: If AI doesn't give a link, create a Google Search link
                 const safeLink = rec.link || `https://www.google.com/search?q=${encodeURIComponent(rec.title + " " + rec.source)}`;
                 
                 return (
@@ -234,11 +249,23 @@ const StudyBuddyResourcesGUI = () => {
       <aside 
         className={`bg-navy-950 text-white flex flex-col transition-all duration-300 z-20 overflow-hidden border-r border-slate-800 ${isSidebarOpen ? 'w-72' : 'w-20'}`}
       >
-        <div className="h-20 flex items-center px-6 border-b border-slate-800">
-          <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20 mr-3">
-            <Brain className="text-white" size={24} />
-          </div>
-          {isSidebarOpen && <span className="ml-3 text-xl font-bold tracking-tight">Study<span className="text-emerald-400">Buddy</span></span>}
+        <div className="h-24 flex items-center justify-center border-b border-slate-800 bg-[#0B1120]">
+            {isSidebarOpen ? (
+                /* Full Text Logo */
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                        <Brain className="text-white" size={24} />
+                    </div>
+                    <span className="text-2xl font-bold tracking-tight text-white">
+                        Study<span className="text-emerald-400">Buddy</span>
+                    </span>
+                </div>
+            ) : (
+                /* Icon Only */
+                <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                    <Brain className="text-white" size={24} />
+                </div>
+            )}
         </div>
 
         <nav className="flex-1 px-4 mt-8 space-y-2">
@@ -262,6 +289,14 @@ const StudyBuddyResourcesGUI = () => {
             </button>
           ))}
         </nav>
+
+        {/* Bottom Actions */}
+        <div className="p-4 border-t border-slate-800 bg-[#080d19]">
+            <button className={`w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all ${!isSidebarOpen && 'justify-center'}`}>
+                <LogOut size={20} />
+                {isSidebarOpen && <span className="ml-3 text-sm font-medium">Logout</span>}
+            </button>
+        </div>
       </aside>
 
       {/* 2. MAIN CONTENT AREA */}
