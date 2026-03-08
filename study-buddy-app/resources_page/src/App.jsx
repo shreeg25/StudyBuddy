@@ -1,10 +1,10 @@
 import React from 'react';
-import StudyBuddyResourcesGUI from './StudyBuddyResourcesGUI';
+import StudyBuddyResources from './StudyBuddyResources';
 
 function App() {
   return (
     <div className="App">
-      <StudyBuddyResourcesGUI />
+      <StudyBuddyResources />
     </div>
   );
 }
